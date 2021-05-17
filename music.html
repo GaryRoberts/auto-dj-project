@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <title>Auto Dj</title>
+  </head>
+  <body>
+
+
+      <div class="container text-center">
+
+         <div class="row justify-content-center align-items-center">
+          <img src="images/logo.JPG" height="100" width="100">
+        </div>
+         <div class="row">
+            
+          <div class="col-sm-6">
+                <img  id="wave-on1" class="wave1" src="images/wave-start.gif" height="40" width="360" style="display:none;">
+                <img  id="wave-stop1" class="wave1"  src="images/wave-stop.JPG" height="40" width="360">
+                <div class="title1">
+                    <h4 id="track1">No track loaded yet</h4>
+                </div>
+          </div>
+
+
+          <div class="col-sm-6">
+              <img id="wave-on2" class="wave2" src="images/wave-start.gif" height="40" width="360" style="display:none;"> 
+              <img  id="wave-stop2" class="wave2"  src="images/wave-stop.JPG" height="40" width="360">
+              <div class="title2">
+                  <h4 id="track2">No track loaded yet</h4>
+              </div> 
+          </div>
+
+        </div>
+            <div class="row">
+
+              <div class="scene">
+
+                <img id="launch" class="start-button" onclick="launcher()" src="images/start-button.png"  height="70"/>
+                
+                <div class="image-upload folder">
+                  <label for="file">
+                      <img src="images/upload-icon.png"/>
+                  </label>
+                  <p style="color:white;">Upload</p>
+                  <input type="file" multiple accept=".mp3,audio/*" id="file" />
+               </div>
+
+                <img class="turntable" src="images/pioneer.png" height="320"> 
+                <img  class="track-stop1 track1--rotate-x"  src="images/disc.png" height="210"> 
+                <img  id="play1" class="track-play1 track1--rotate-x"  src="images/disc.png" height="210" style="display:none;"> 
+                
+                <img  class="track-stop2 track2--rotate-x"  src="images/disc.png" height="210"> 
+                <img  id="play2" class="track-play2 track2--rotate-x"  src="images/disc.png" height="210" style="display:none;"> 
+              </div> 
+              
+          </div> 
+          <div class="row justify-content-center align-items-center" >
+            <input id="range1" class="crossFader" type="range" min="1" max="20" value="0" aria-label="select pen size"><span class="output">50</span>
+            
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">View PLaylist</button>
+
+            <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                  <div id="fileList"></div>
+                </div>
+              </div>
+            </div>
+              
+           </div>
+           <!--<input id="trackNow" type="text">
+           <input id="trackNext" type="text"> -->
+           
+
+        <!------ CODE FOR MAIN AUDIO TAGS WITH TRACKS  -------->   
+        <audio id="audio1" >
+          <source src="" id="src1" />
+        </audio>
+      
+        <audio id="audio2" >
+          <source src="" id="src2" />
+        </audio>
+      
+     <!------ END OF CODE FOR MAIN AUDIO TAGS WITH TRACKS  -------->   
+      
+         <div id="result"></div>
+    </div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+      
+
+<script type="text/javascript">
+
+var input;
+var crossFadeValue = 10;
+
+function handleFiles(event) {
+    input = event.target.files;
+
+    var output = document.getElementById('fileList');
+    var result = document.getElementById('result');
+
+    var children = "";
+    var audioTags = "";
+
+
+    Array.from(input).forEach(file => {
+        const reader = new FileReader();
+
+        children += '<li class="list-group-item" style="color:black;">' + file.name + '</li>';
+    });
+
+    output.innerHTML = '<ul class="list-group">' + children + '</ul>';
+}
+
+
+document.getElementById("file").addEventListener("change", handleFiles, false);
+
+
+
+function loadDeck1(input, index) {
+    var audio1 = document.getElementById("audio1");
+
+    $("#src1").attr("src", URL.createObjectURL(input[index]));
+    audio1.load();
+
+    audio1.addEventListener('canplaythrough', function() {
+
+        this.play();
+        document.getElementById("track1").innerHTML = input[index].name.substring(0, 30) + "...";
+        show1();
+
+    });
+
+    setTimeout(function() {
+        document.getElementById("audio1").pause();
+
+    }, 36000)
+}
+
+function loadDeck2(input, index) {
+    var audio2 = document.getElementById("audio2");
+
+    $("#src2").attr("src", URL.createObjectURL(input[index]));
+    audio2.load();
+
+    audio2.addEventListener('canplaythrough', function() {
+        this.play();
+
+        document.getElementById("track2").innerHTML = input[index].name.substring(0, 30) + "...";
+        show2();
+    });
+    setTimeout(function() {
+        document.getElementById("audio2").pause();
+
+    }, 36000)
+}
+
+var counter = 0;
+var interval;
+var adjustVolume;
+var time = 30000;
+
+
+function launcher() {
+    document.getElementById("range1").value = 10;
+    loadDeck1(input, counter);
+    counter++;
+    automixer();
+}
+
+function automixer() {
+    var audio1 = document.getElementById("audio1");
+    var audio2 = document.getElementById("audio2");
+
+
+    interval = setInterval(function() {
+
+
+        if (counter <= input.length && counter == 1) {
+            loadDeck2(input, counter);
+        }
+
+        if (counter <= input.length && counter % 2 == 0) {
+            loadDeck1(input, counter);
+        }
+
+        if (counter <= input.length && counter % 2 != 0 && counter > 1) {
+            loadDeck2(input, counter);
+        }
+
+
+        if (counter == input.length) {
+            clearInterval(interval);
+
+        }
+
+        counter++;
+    }, time);
+
+}
+
+
+
+function volumeAdjuster1() {
+    adjustVolume = setInterval(function() {
+        for (var m = 1; m <= 20; m++) {
+            document.getElementById("range1").value = crossFadeValue++;
+            if (m == 20) {
+                document.getElementById("audio1").pause();
+            }
+
+            setInterval(function() {
+                if (m >= 10) {
+                    document.getElementById("audio2").volume += 0.1;
+
+                    document.getElementById("audio1").volume -= 0.1;
+                }
+
+
+            }, 3000);
+        }
+    }, 6000);
+}
+
+
+
+function volumeAdjuster2() {
+    adjustVolume = setInterval(function() {
+        for (var m = 1; m <= 20; m++) {
+            document.getElementById("range1").value = crossFadeValue--;
+            if (m == 20) {
+                document.getElementById("audio2").pause();
+            }
+
+            setInterval(function() {
+                if (m >= 10) {
+                    document.getElementById("audio2").volume -= 0.1;
+
+                    document.getElementById("audio1").volume += 0.1;
+                }
+
+
+            }, 3000);
+        }
+    }, 6000);
+}
+
+
+
+
+function PlaySound1() {
+
+    document.getElementById("wave-stop1").style.display = "none";
+    document.getElementById("wave-on1").style.display = "";
+
+}
+
+
+function PlaySound2() {
+
+    document.getElementById("wave-stop2").style.display = "none";
+    document.getElementById("wave-on2").style.display = "";
+
+}
+
+
+
+function show1() {
+    document.getElementById("play1").style.display = "";
+    PlaySound1();
+}
+
+function show2() {
+    document.getElementById("play2").style.display = "";
+    PlaySound2();
+}
+
+function hide1() {
+    document.getElementById("play1").style.display = "none";
+    pauseSound1();
+}
+
+function hide2() {
+    document.getElementById("play2").style.display = "none";
+    pauseSound2();
+}
+
+
+function pauseSound1() {
+    document.getElementById("wave-stop1").style.display = "";
+    document.getElementById("wave-on1").style.display = "none";
+    document.getElementById("audio1").pause();
+}
+
+function pauseSound2() {
+    document.getElementById("wave-stop2").style.display = "";
+    document.getElementById("wave-on2").style.display = "none";
+    document.getElementById("audio2").pause();
+}
+
+</script>
+
+
+
+</body>

@@ -34,6 +34,7 @@ function loadDeck1(input, index) {
     audio1.addEventListener('canplaythrough', function() {
 
         this.play();
+        //soundEffect(1);
         document.getElementById("track1").innerHTML = input[index].name.substring(0, 30) + "...";
         show1();
 
@@ -53,7 +54,7 @@ function loadDeck2(input, index) {
 
     audio2.addEventListener('canplaythrough', function() {
         this.play();
-
+        //soundEffect(1);
         document.getElementById("track2").innerHTML = input[index].name.substring(0, 30) + "...";
         show2();
     });
@@ -204,4 +205,20 @@ function pauseSound2() {
     document.getElementById("wave-stop2").style.display = "";
     document.getElementById("wave-on2").style.display = "none";
     document.getElementById("audio2").pause();
+}
+
+
+var getRandomEffect=Math.floor(Math.random() * 11); //from 0 to 10
+var getRandomPullup=Math.floor(Math.random() * 1);
+
+
+function soundEffect(effectType)
+{
+  var effectsList = ["effect","transition","horn", "guns", "bounty"];
+
+    
+        var effect = new Audio('sound_effects/'+effectsList[effectType]+'.wav');
+        effect.play();   
+   
+
 }

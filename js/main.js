@@ -79,6 +79,10 @@ function loadDeck2(input, index) {
 
 function launcher() {
     document.getElementById("range1").value = 10;
+
+    document.getElementById("uploadImage").style.display = "none"; 
+    document.getElementById("uploadLabel").style.display = "none";
+    document.getElementById("launch").style.display = "none";
     loadDeck1(input, counter);
     counter++;
     automixer();

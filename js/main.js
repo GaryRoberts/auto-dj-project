@@ -1,14 +1,17 @@
 var input;
 var crossFadeValue = 10;
 
+var counter = 0;
+var interval;
+var adjustVolume;
+var time = 30000;
+var children = "";
+
 function handleFiles(event) {
     input = event.target.files;
 
     var output = document.getElementById('fileList');
-    var result = document.getElementById('result');
-
-    var children = "";
-    var audioTags = "";
+   
 
 
     Array.from(input).forEach(file => {
@@ -34,6 +37,7 @@ function loadDeck1(input, index) {
     audio1.addEventListener('canplaythrough', function() {
 
         this.play();
+        document.getElementById("range1").value = 1;
         //soundEffect(1);
         document.getElementById("track1").innerHTML = input[index].name.substring(0, 30) + "...";
         show1();
@@ -42,7 +46,7 @@ function loadDeck1(input, index) {
 
     setTimeout(function() {
         document.getElementById("audio1").pause();
-
+       
     }, 36000)
 }
 
@@ -54,20 +58,18 @@ function loadDeck2(input, index) {
 
     audio2.addEventListener('canplaythrough', function() {
         this.play();
+        document.getElementById("range1").value = 20;
         //soundEffect(1);
         document.getElementById("track2").innerHTML = input[index].name.substring(0, 30) + "...";
         show2();
     });
     setTimeout(function() {
         document.getElementById("audio2").pause();
-
+        
     }, 36000)
+
 }
 
-var counter = 0;
-var interval;
-var adjustVolume;
-var time = 30000;
 
 
 function launcher() {
@@ -75,16 +77,15 @@ function launcher() {
     loadDeck1(input, counter);
     counter++;
     automixer();
-}
+    
 
 function automixer() {
-    var audio1 = document.getElementById("audio1");
-    var audio2 = document.getElementById("audio2");
-
 
     interval = setInterval(function() {
-
-
+        if (counter==input.length) {
+            clearInterval(interval);
+            hide1(); hide2();
+        }     
         if (counter <= input.length && counter == 1) {
             loadDeck2(input, counter);
         }
@@ -98,14 +99,13 @@ function automixer() {
         }
 
 
-        if (counter == input.length) {
-            clearInterval(interval);
-
-        }
+        
 
         counter++;
+       
     }, time);
 
+}
 }
 
 
@@ -208,7 +208,7 @@ function pauseSound2() {
 }
 
 
-var getRandomEffect=Math.floor(Math.random() * 11); //from 0 to 10
+var getRandomEffect=Math.floor(Math.random() * 5); //from 0 to 5
 var getRandomPullup=Math.floor(Math.random() * 1);
 
 
@@ -216,9 +216,8 @@ function soundEffect(effectType)
 {
   var effectsList = ["effect","transition","horn", "guns", "bounty"];
 
-    
-        var effect = new Audio('sound_effects/'+effectsList[effectType]+'.wav');
-        effect.play();   
+   var effect = new Audio('sound_effects/'+effectsList[effectType]+'.mp3');
+   effect.play();   
    
 
 }

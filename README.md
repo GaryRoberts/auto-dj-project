@@ -8,4 +8,4 @@ JavaScript based web app that allows a user to load music in the browser and hav
 4. Sound effects while mixing music</br>
 
 ![landing-page](https://user-images.githubusercontent.com/35618554/118428299-c4512780-b694-11eb-9ca1-fe46a94908a9.JPG)</br>
-![screenshot](https://user-images.githubusercontent.com/35618554/118427806-acc56f00-b693-11eb-89eb-3678efc4c7ce.JPG)
+![image](https://user-images.githubusercontent.com/35618554/118912192-01aff200-b8ed-11eb-8aa9-4ae731f35f1a.png)

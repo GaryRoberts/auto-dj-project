@@ -6,19 +6,22 @@ var interval;
 var adjustVolume;
 var time = 30000;
 var children = "";
+var dynamicList;
 
 function handleFiles(event) {
     input = event.target.files;
 
     var output = document.getElementById('fileList');
-   
+    var itemId=0;
 
 
     Array.from(input).forEach(file => {
         const reader = new FileReader();
 
-        children += '<li class="list-group-item" style="color:black;">' + file.name + '</li>';
+        children += '<li id="music'+itemId+'" class="list-group-item" style="color:black;">' + file.name + '</li>';
+        itemId++;
     });
+
 
     output.innerHTML = '<ul class="list-group">' + children + '</ul>';
 }
@@ -37,6 +40,7 @@ function loadDeck1(input, index) {
     audio1.addEventListener('canplaythrough', function() {
 
         this.play();
+        document.getElementById("music"+index).style.color='red';
         document.getElementById("range1").value = 1;
         //soundEffect(1);
         document.getElementById("track1").innerHTML = input[index].name.substring(0, 30) + "...";
@@ -58,6 +62,7 @@ function loadDeck2(input, index) {
 
     audio2.addEventListener('canplaythrough', function() {
         this.play();
+        document.getElementById("music"+index).style.color='red';
         document.getElementById("range1").value = 20;
         //soundEffect(1);
         document.getElementById("track2").innerHTML = input[index].name.substring(0, 30) + "...";
@@ -78,12 +83,14 @@ function launcher() {
     counter++;
     automixer();
     
+}
 
 function automixer() {
 
     interval = setInterval(function() {
         if (counter==input.length) {
             clearInterval(interval);
+           
             hide1(); hide2();
         }     
         if (counter <= input.length && counter == 1) {
@@ -106,7 +113,7 @@ function automixer() {
     }, time);
 
 }
-}
+
 
 
 
@@ -221,3 +228,4 @@ function soundEffect(effectType)
    
 
 }
+

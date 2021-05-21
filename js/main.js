@@ -1,4 +1,4 @@
-var input;
+var input=0;
 var crossFadeValue = 10;
 
 var counter = 0;
@@ -7,6 +7,29 @@ var adjustVolume;
 var time = 30000;
 var children = "";
 var dynamicList;
+
+
+function confirmBackground()
+{
+    if(document.getElementById('image0').checked) {
+        window.localStorage.setItem('background','0');  
+        changeBackground(0);
+    }
+    else if(document.getElementById('image1').checked) {
+        window.localStorage.setItem('background','1');
+        changeBackground(1);  
+    }
+    else if(document.getElementById('image2').checked) {
+        window.localStorage.setItem('background','2'); 
+        changeBackground(2);  
+    }
+    else {
+        window.localStorage.setItem('background','3');  
+        changeBackground(3); 
+    }
+}
+
+document.getElementById("range1").value = 10;
 
 function handleFiles(event) {
     input = event.target.files;
@@ -29,7 +52,17 @@ function handleFiles(event) {
 
 document.getElementById("file").addEventListener("change", handleFiles, false);
 
+var checkbox = document.querySelector("input[name=checkbox]");
 
+checkbox.addEventListener('change', function() {
+    if(this.checked) {
+        launcher();
+    } else {
+        clearInterval(interval);  
+        hide1(); hide2();
+        counter=0;
+    }
+});
 
 function loadDeck1(input, index) {
     var audio1 = document.getElementById("audio1");
@@ -78,15 +111,21 @@ function loadDeck2(input, index) {
 
 
 function launcher() {
-    document.getElementById("range1").value = 10;
+   
+    if(input!=0){
+    
 
     document.getElementById("uploadImage").style.display = "none"; 
     document.getElementById("uploadLabel").style.display = "none";
-    document.getElementById("launch").style.display = "none";
+    //document.getElementById("launch").style.display = "none";
     loadDeck1(input, counter);
     counter++;
     automixer();
-    
+   }
+   else{
+       alert("Please load some tracks in the system");
+       checkbox.checked = false;
+   }
 }
 
 function automixer() {
@@ -96,6 +135,8 @@ function automixer() {
             clearInterval(interval);
            
             hide1(); hide2();
+            document.getElementById("range1").value = 10;
+            checkbox.checked = false;
         }     
         if (counter <= input.length && counter == 1) {
             loadDeck2(input, counter);

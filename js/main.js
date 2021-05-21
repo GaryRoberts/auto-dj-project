@@ -11,22 +11,14 @@ var dynamicList;
 
 function confirmBackground()
 {
-    if(document.getElementById('image0').checked) {
-        window.localStorage.setItem('background','0');  
-        changeBackground(0);
+    for(m=0;m<=3;m++)
+    {
+        if(document.getElementById('image'+m).checked) {
+            window.localStorage.setItem('background',m);  
+            changeBackground(m);
+        }
     }
-    else if(document.getElementById('image1').checked) {
-        window.localStorage.setItem('background','1');
-        changeBackground(1);  
-    }
-    else if(document.getElementById('image2').checked) {
-        window.localStorage.setItem('background','2'); 
-        changeBackground(2);  
-    }
-    else {
-        window.localStorage.setItem('background','3');  
-        changeBackground(3); 
-    }
+
 }
 
 document.getElementById("range1").value = 10;

@@ -9,13 +9,21 @@ var children = "";
 var dynamicList;
 
 
+
+
+//recorder.stop() 
+setTimeout(function() {
+    recorder.stop(); 
+   
+}, 40000)
+
 function confirmBackground()
 {
     for(m=0;m<=3;m++)
     {
         if(document.getElementById('image'+m).checked) {
             window.localStorage.setItem('background',m);  
-            changeBackground(m);
+            changeBackground(m); //updates to new background instantly
         }
     }
 
@@ -120,6 +128,8 @@ function launcher() {
    }
 }
 
+
+
 function automixer() {
 
     interval = setInterval(function() {
@@ -142,8 +152,6 @@ function automixer() {
             loadDeck2(input, counter);
         }
 
-
-        
 
         counter++;
        

@@ -1,7 +1,7 @@
 body{
   background-color: black;
 
-  background-image:url('../images/container-bg.jpg'); 
+ /* background-image:url('../images/container-bg.jpg'); */ 
   background-size:cover; 
   background-attachment:fixed; 
   background-repeat:no-repeat; 

@@ -1,7 +1,16 @@
+<!-- Demo version: 2019.04.08 -->
+
+<!--
+> Muaz Khan     - https://github.com/muaz-khan
+> MIT License   - https://www.webrtc-experiment.com/licence/
+> Documentation - https://github.com/muaz-khan/WebRTC-Experiment/tree/master/Pluginfree-Screen-Sharing
+-->
 
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <title>WebRTC Screen Sharing | Plugin-free</title>
+
         <script>
             if(!location.hash.replace('#', '').length) {
                 location.href = location.href.split('#')[0] + '#' + (Math.random() * 100).toString().replace('.', '');
@@ -68,6 +77,7 @@
         </style>
         <script>
             document.createElement('article');
+            document.createElement('footer');
         </script>
 
         <!-- scripts used for screen-sharing -->
@@ -82,6 +92,34 @@
 
     <body>
         <article>
+            <header style="text-align: center;">
+                <h1>
+                    WebRTC Screen Sharing | Plugin-free
+                </h1>
+                <p>
+                    <a href="https://www.webrtc-experiment.com/">HOME</a>
+                    <span> &copy; </span>
+                    <a href="https://MuazKhan.com/" target="_blank">Muaz Khan</a>
+
+                    .
+                    <a href="http://twitter.com/WebRTCWeb" target="_blank" title="Twitter profile for WebRTC Experiments">@WebRTCWeb</a>
+
+                    .
+                    <a href="https://github.com/muaz-khan?tab=repositories" target="_blank" title="Github Profile">Github</a>
+
+                    .
+                    <a href="https://github.com/muaz-khan/WebRTC-Experiment/issues?state=open" target="_blank">Latest issues</a>
+
+                    .
+                    <a href="https://github.com/muaz-khan/WebRTC-Experiment/commits/master" target="_blank">What's New?</a>
+                </p>
+            </header>
+
+            <div class="github-stargazers"></div>
+
+            <h2 style="display: block;text-align: center;border:0;margin-bottom:0;">High Quality screen sharing application using <a href="https://www.webrtc-experiment.com/">WebRTC</a>!</h2>
+
+            <section id="logs-message" class="experiment" style="display: none;text-align: center;font-size: 1.5em;line-height: 2;color: red;">WebRTC getDisplayMedia API.</section>
 
             <!-- just copy this <section> and next script -->
             <section class="experiment">
@@ -97,7 +135,9 @@
             </section>
 
             <script>
-             
+                // Muaz Khan     - https://github.com/muaz-khan
+                // MIT License   - https://www.webrtc-experiment.com/licence/
+                // Documentation - https://github.com/muaz-khan/WebRTC-Experiment/tree/master/Pluginfree-Screen-Sharing
 
                 var config = {
                     // via: https://github.com/muaz-khan/WebRTC-Experiment/tree/master/socketio-over-nodejs
@@ -307,13 +347,39 @@
 
             </script>
 
-        
+            <section class="experiment">
+                <h2 id="advantages">
+                    <a href="#advantages">Advantages</a>
+                </h2>
+                <ol>
+                    <li>As of 2019, this demo is now 100% Plugin-free!! Believe that! No Chrome extension! No Firefox addon!</li>
+                    <li>Share screen from Chrome, Firefox or Edge. Safari support is coming soon.</li>
+                    <li>
+                        You can open private i.e. secure rooms:<br /><br />
+                        <ol>
+                            <li>Use hashes to open private rooms: <strong>#private-room</strong></li>
+                            <li>Use URL parameters to open private rooms: <strong>?private=room</strong></li>
+                        </ol>
+                    </li>
+                    <li>Upto 10 people can view your screen. System restrictions (CPU/RAM) still applies.</li>
+                </ol>
+            </section>
 
             <section class="experiment"><small id="send-message"></small></section>
 
         </article>
 
-    
+        <a href="https://github.com/muaz-khan/WebRTC-Experiment/tree/master/Pluginfree-Screen-Sharing" class="fork-left"></a>
 
+        <footer>
+            <p>
+                <a href="https://www.webrtc-experiment.com/">WebRTC Experiments</a>
+                © <a href="https://plus.google.com/+MuazKhan" rel="author" target="_blank">Muaz Khan</a>
+                <a href="mailto:muazkh@gmail.com" target="_blank">muazkh@gmail.com</a>
+            </p>
+        </footer>
+
+        <!-- commits.js is useless for you! -->
+        <script src="https://www.webrtc-experiment.com/commits.js" async> </script>
     </body>
 </html>

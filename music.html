@@ -66,9 +66,9 @@
                     </label>
                     <p id="uploadLabel" style="color:white;">Upload</p>
                     <input type="file" multiple accept=".mp3,audio/*" id="file" /><br>
-                    <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#playlist">Playlist</button><br>
-                    <br><button type="button" class="btn btn-dark" data-toggle="modal" data-target="#effects">Effects</button><br>
-                    <br><button type="button" class="btn btn-dark" data-toggle="modal" data-target="#wallpaper">Wallpaper</button>
+                    <button type="button" class="btn btn-dark button-glow" data-toggle="modal" data-target="#playlist">Playlist</button><br>
+                    <br><button type="button" class="btn btn-dark button-glow" data-toggle="modal" data-target="#effects">Effects</button><br>
+                    <br><button type="button" class="btn btn-dark button-glow" data-toggle="modal" data-target="#wallpaper">Wallpaper</button>
                   </div>
 
                   <img class="turntable" src="images/pioneer.png" height="320"> 
@@ -86,18 +86,20 @@
 
             <div class="modal fade bd-example-modal-lg" id="playlist" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
               <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                  <h1 class="playlist-heading">Music Playlist</h1>
-                  <div id="fileList"></div>
+                <div class="modal-content custom-modal"><br>
+                  <h1 class="playlist-heading">Music Playlist</h1><br>
+                
+                  <div id="fileList" class="custom-list"></div>
                 </div>
               </div>
             </div>
 
             <div class="modal fade bd-example-modal-lg" id="wallpaper" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
               <div class="modal-dialog modal-lg">
-                <div class="modal-content">
+                <div class="modal-content custom-modal"><br>
                   <h1 class="playlist-heading">Select wallpaper</h1><br>
-                  
+                  <p class="instructions">Click on an image and press change</p><br>
+
                   <label>
                     <input id="image0" type="radio" name="test" value="small">
                     <img height="100" width="200" src="images/container-bg0.jpg">

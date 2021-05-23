@@ -61,6 +61,8 @@ checkbox.addEventListener('change', function() {
         clearInterval(interval);  
         hide1(); hide2();
         counter=0;
+        document.getElementById("uploadImage").style.display = ""; 
+        document.getElementById("uploadLabel").style.display = "";
     }
 });
 

@@ -125,7 +125,7 @@ function launcher() {
     automixer();
    }
    else{
-       alert("Please load some tracks in the system");
+    alertBox("Please load some tracks in the system");
        checkbox.checked = false;
    }
 }
@@ -274,5 +274,24 @@ function soundEffect(effectType)
    effect.play();   
    
 
+}
+
+
+$( document ).ready(function() {
+   
+     $('.hover_bkgr_fricc').click(function(){
+         $('.hover_bkgr_fricc').hide();
+     });
+     $('.popupCloseButton').click(function(){
+         $('.hover_bkgr_fricc').hide();
+     });
+});
+
+
+function alertBox(message){
+    $( document ).ready(function() {
+      document.getElementById("alertContent").innerHTML=message;
+      $('.hover_bkgr_fricc').show();
+    });
 }
 

@@ -120,7 +120,7 @@ function launcher() {
         document.getElementById("uploadLabel").style.display = "none";
         initializeVisuals1();
         initializeVisuals2();
-        //document.getElementById("launch").style.display = "none";
+
         loadDeck1(input, counter);
 
         counter++;
@@ -215,55 +215,30 @@ function volumeAdjuster2() {
 
 
 
-function PlaySound1() {
-
-    document.getElementById("wave-stop1").style.display = "none";
-    document.getElementById("wave-on1").style.display = "";
-
-}
-
-
-function PlaySound2() {
-
-    document.getElementById("wave-stop2").style.display = "none";
-    document.getElementById("wave-on2").style.display = "";
-
-}
 
 
 
 function show1() {
     document.getElementById("play1").style.display = "";
-    PlaySound1();
+
 }
 
 function show2() {
     document.getElementById("play2").style.display = "";
-    PlaySound2();
+
 }
 
 function hide1() {
     document.getElementById("play1").style.display = "none";
-    pauseSound1();
+    document.getElementById("audio1").pause();
 }
 
 function hide2() {
     document.getElementById("play2").style.display = "none";
-    pauseSound2();
-}
-
-
-function pauseSound1() {
-    document.getElementById("wave-stop1").style.display = "";
-    document.getElementById("wave-on1").style.display = "none";
-    document.getElementById("audio1").pause();
-}
-
-function pauseSound2() {
-    document.getElementById("wave-stop2").style.display = "";
-    document.getElementById("wave-on2").style.display = "none";
     document.getElementById("audio2").pause();
 }
+
+
 
 
 var getRandomEffect = Math.floor(Math.random() * 5); //from 0 to 5

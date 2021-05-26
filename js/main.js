@@ -119,7 +119,6 @@ function launcher() {
         document.getElementById("uploadImage").style.display = "none";
         document.getElementById("uploadLabel").style.display = "none";
         initializeVisuals();
-        //initializeVisuals2();
 
         loadDeck1(input, counter);
 
@@ -134,6 +133,8 @@ function launcher() {
 
 
 function automixer() {
+
+   // https://stackoverflow.com/questions/21277900/how-can-i-pause-setinterval-functions
     interval = setInterval(function() {
         if (counter == input.length) {
             clearInterval(interval);
@@ -143,7 +144,7 @@ function automixer() {
             
             document.getElementById("range1").value = 10;
             checkbox.checked = false;
-            input=NULL;
+            //input=NULL;
         }
         if (counter <= input.length && counter == 1) {
             loadDeck2(input, counter);
@@ -213,9 +214,6 @@ function volumeAdjuster2() {
         }
     }, 6000);
 }
-
-
-
 
 
 

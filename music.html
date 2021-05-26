@@ -1,73 +1,77 @@
 <!doctype html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <script type="text/javascript">
+        if (!location.hash.replace('#', '').length) {
+            location.href = location.href.split('#')[0] + '#' + (Math.random() * 100).toString().replace('.', '');
+            location.reload();
+        }
 
-     if(!location.hash.replace('#', '').length) {
-                location.href = location.href.split('#')[0] + '#' + (Math.random() * 100).toString().replace('.', '');
-                location.reload();
-            }
+        if (screen.width <= 480) {
+            window.location.href = "error_page.html";
+        }
+    </script>
 
-       if(screen.width <= 480 ) {window.location.href = "error_page.html"; }
-   </script>
+    <link rel="stylesheet" href="screen-share-style.css">
 
-<link rel="stylesheet" href="screen-share-style.css">
+    <style>
+        video {
+            -moz-transition: all 1s ease;
+            -ms-transition: all 1s ease;
 
-<style>
-    video {
-        -moz-transition: all 1s ease;
-        -ms-transition: all 1s ease;
+            -o-transition: all 1s ease;
+            -webkit-transition: all 1s ease;
+            transition: all 1s ease;
+            vertical-align: top;
+            width: 100%;
+        }
 
-        -o-transition: all 1s ease;
-        -webkit-transition: all 1s ease;
-        transition: all 1s ease;
-        vertical-align: top;
-        width: 100%;
-    }
+        input {
+            border: 1px solid #d9d9d9;
+            border-radius: 1px;
+            font-size: 2em;
+            margin: .2em;
+            width: 30%;
+        }
 
-    input {
-        border: 1px solid #d9d9d9;
-        border-radius: 1px;
-        font-size: 2em;
-        margin: .2em;
-        width: 30%;
-    }
+        select {
+            border: 1px solid #d9d9d9;
+            border-radius: 1px;
+            height: 50px;
+            margin-left: 1em;
+            margin-right: -12px;
+            padding: 1.1em;
+            vertical-align: 6px;
+            width: 18%;
+        }
 
-    select {
-        border: 1px solid #d9d9d9;
-        border-radius: 1px;
-        height: 50px;
-        margin-left: 1em;
-        margin-right: -12px;
-        padding: 1.1em;
-        vertical-align: 6px;
-        width: 18%;
-    }
+        .setup {
+            border-bottom-left-radius: 0;
+            border-top-left-radius: 0;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            margin-top: 20px;
+            border-radius: 5px;
+        }
 
-    .setup {
-        border-bottom-left-radius: 0;
-        border-top-left-radius: 0;
-        font-size: 1.5em;
-        margin-bottom: 20px;
-        margin-top: 20px;
-        border-radius: 5px;
-    }
+        p {
+            padding: 1em;
+        }
 
-    p { padding: 1em; }
+        li {
+            border-bottom: 1px solid rgb(189, 189, 189);
+            border-left: 1px solid rgb(189, 189, 189);
+            padding: .5em;
+        }
+    </style>
+    <script>
+        document.createElement('article');
+        document.createElement('footer');
+    </script>
 
-    li {
-        border-bottom: 1px solid rgb(189, 189, 189);
-        border-left: 1px solid rgb(189, 189, 189);
-        padding: .5em;
-    }
-</style>
-<script>
-    document.createElement('article');
-    document.createElement('footer');
-</script>
-         
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" crossorigin="anonymous">
@@ -87,55 +91,53 @@
 
     <title>Auto Dj</title>
 
-  </head>
-  <body>
+</head>
 
-   <script src="js/background.js" type="text/javascript"></script>  
-      <div class="container text-center">
+<body>
 
-         <div class="row justify-content-center align-items-center">
-          <img class="logo" src="images/logo.JPG" height="100" width="100">
+    <script src="js/background.js" type="text/javascript"></script>
+    <div class="container text-center">
+
+        <div class="row justify-content-center align-items-center">
+            <img class="logo" src="images/logo.JPG" height="100" width="100">
         </div>
-         <div class="row">
-            
-          <div class="col-sm-6">
-                <img  id="wave-on1" class="wave1" src="images/wave-start.gif" height="40" width="360" style="display:none;">
-                <img  id="wave-stop1" class="wave1"  src="images/wave-stop.JPG" height="40" width="360">
+        <div class="row">
+
+            <div class="col-sm-6">
+                <canvas id="canvas1"></canvas>
                 <div class="title1">
                     <h4 id="track1">No track loaded yet</h4>
                 </div>
-          </div>
+            </div>
 
 
-          <div class="col-sm-6">
-              <img id="wave-on2" class="wave2" src="images/wave-start.gif" height="40" width="360" style="display:none;"> 
-              <img  id="wave-stop2" class="wave2"  src="images/wave-stop.JPG" height="40" width="360">
-              <div class="title2">
-                  <h4 id="track2">No track loaded yet</h4>
-              </div> 
-          </div>
+            <div class="col-sm-6">
+
+                <canvas id="canvas2"></canvas>
+                <div class="title2">
+                    <h4 id="track2">No track loaded yet</h4>
+                </div>
+            </div>
 
         </div>
-            <div class="row">
+        <div class="row">
 
-              <div class="scene">
-
-                  <!--<img id="launch" class="start-button" onclick="launcher()" src="images/start-button.png"  height="70"/>-->
-                  <label class="switch">
-                    <input id="power" name="checkbox" type="checkbox"/>
+            <div class="scene">
+                <label class="switch">
+                    <input id="power" name="checkbox" type="checkbox" />
                     <div class="button">
-                      <div class="light"></div>
-                      <div class="dots"></div>
-                      <div class="characters"></div>
-                      <div class="shine"></div>
-                      <div class="shadow"></div>
+                        <div class="light"></div>
+                        <div class="dots"></div>
+                        <div class="characters"></div>
+                        <div class="shine"></div>
+                        <div class="shadow"></div>
                     </div>
-                  </label>
-                  
-                  <div class="image-upload folder">
+                </label>
+
+                <div class="image-upload folder">
                     <label for="file">
-                        <img id="uploadImage" src="images/upload-icon.png"/>
-                        
+                        <img id="uploadImage" src="images/upload-icon.png" />
+
                     </label>
                     <p id="uploadLabel" style="color:white;">Upload</p>
                     <input type="file" multiple accept=".mp3,audio/*" id="file" /><br>
@@ -143,110 +145,111 @@
                     <br><button type="button" class="btn btn-dark button-glow" data-toggle="modal" data-target="#effects"><i class="fa fa-signal"><br> Effects</i></button><br>
                     <br><button type="button" class="btn btn-dark button-glow" data-toggle="modal" data-target="#wallpaper"><i class="fa fa-image"> Theme</i></button>
                     <img src="images/share.png" height="70" width="100" data-toggle="modal" data-target="#screen-sharing">
-                  </div>
-                  
+                </div>
 
-                  <img class="turntable" src="images/pioneer.png" height="320"> 
-                  <img  class="track-stop1 track1--rotate-x"  src="images/disc.png" height="210"> 
-                  <img  id="play1" class="track-play1 track1--rotate-x"  src="images/disc.png" height="210" style="display:none;"> 
-                  
-                  <img  class="track-stop2 track2--rotate-x"  src="images/disc.png" height="210"> 
-                  <img  id="play2" class="track-play2 track2--rotate-x"  src="images/disc.png" height="210" style="display:none;"> 
-              </div> 
-              
-          </div> 
-          <div class="row justify-content-center align-items-center" >
-            <input id="range1" class="crossFader" type="range" min="1" max="20" value="0" aria-label="select pen size"><!--<span class="output">50</span>-->
+
+                <img class="turntable" src="images/pioneer.png" height="320">
+                <img class="track-stop1 track1--rotate-x" src="images/disc.png" height="210">
+                <img id="play1" class="track-play1 track1--rotate-x" src="images/disc.png" height="210" style="display:none;">
+
+                <img class="track-stop2 track2--rotate-x" src="images/disc.png" height="210">
+                <img id="play2" class="track-play2 track2--rotate-x" src="images/disc.png" height="210" style="display:none;">
+            </div>
+
+        </div>
+        <div class="row justify-content-center align-items-center">
+            <input id="range1" class="crossFader" type="range" min="1" max="20" value="0" aria-label="select pen size">
+            <!--<span class="output">50</span>-->
 
 
             <div class="modal fade bd-example-modal-lg" id="playlist" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-              <div class="modal-dialog modal-lg">
-                <div class="modal-content custom-modal"><br>
-                  <h1 class="playlist-heading">Music Playlist</h1><br>
-                
-                  <div id="fileList" class="custom-list"></div>
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content custom-modal"><br>
+                        <h1 class="playlist-heading">Music Playlist</h1><br>
+
+                        <div id="fileList" class="custom-list"></div>
+                    </div>
                 </div>
-              </div>
             </div>
 
 
             <div class="modal fade bd-example-modal-lg" id="screen-sharing" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-              <div class="modal-dialog modal-lg">
-                <div class="modal-content custom-modal"><br>
-                  <h1 class="playlist-heading">Screen sharing</h1><br>
-                      <article>
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content custom-modal"><br>
+                        <h1 class="playlist-heading">Screen sharing</h1><br>
+                        <article>
 
-                        <section id="logs-message" class="experiment" style="display: none;text-align: center;font-size: 1.5em;line-height: 2;color: red;">WebRTC getDisplayMedia API.</section>
-            
-                        <!-- just copy this <section> and next script -->
-                        <section class="experiment">
-                            <section class="hide-after-join" style="text-align: center;">                    
-                                <input type="text" id="room-name" placeholder="Enter " style="width: 80%; text-align: center; display: none;">
-                                <button id="share-screen" class="setup">Share</button>
+                            <section id="logs-message" class="experiment" style="display: none;text-align: center;font-size: 1.5em;line-height: 2;color: red;">WebRTC getDisplayMedia API.</section>
+
+                            <!-- just copy this <section> and next script -->
+                            <section class="experiment">
+                                <section class="hide-after-join" style="text-align: center;">
+                                    <input type="text" id="room-name" placeholder="Enter " style="width: 80%; text-align: center; display: none;">
+                                    <button id="share-screen" class="btn btn-danger button-glow">Share</button><br>
+                                </section>
+
+                                <!-- local/remote videos container -->
+                                <div id="videos-container"></div>
+
+                                <section id="unique-token" style="display: none; text-align: center; padding: 20px;"></section>
                             </section>
-            
-                            <!-- local/remote videos container -->
-                            <div id="videos-container"></div>
-            
-                            <section id="unique-token" style="display: none; text-align: center; padding: 20px;"></section>
-                        </section>
-            
-                        <script src="js/sharing.js"></script>
-            
-                    </article>
-                  
+
+                            <script src="js/sharing.js"></script>
+
+                        </article>
+
+                    </div>
                 </div>
-              </div>
             </div>
 
 
             <div class="modal fade bd-example-modal-lg" id="wallpaper" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-              <div class="modal-dialog modal-lg">
-                <div class="modal-content custom-modal"><br>
-                  <h1 class="playlist-heading">Select wallpaper</h1><br>
-                  <p class="instructions">Click on an image and press change</p><br>
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content custom-modal"><br>
+                        <h1 class="playlist-heading">Select wallpaper</h1><br>
+                        <p class="instructions">Click on an image and press change</p><br>
 
-                  <label>
-                    <input id="image0" type="radio" name="test" value="small">
-                    <img height="100" width="200" src="images/container-bg0.jpg">
-                  </label>
-                  
-                  <label>
-                    <input id="image1" type="radio" name="test" value="big">
-                    <img height="100" width="200" src="images/container-bg1.jpg">
-                  </label>
+                        <label>
+                            <input id="image0" type="radio" name="test" value="small">
+                            <img height="100" width="200" src="images/container-bg0.jpg">
+                        </label>
 
-                  <label>
-                    <input id="image2" type="radio" name="test" value="small">
-                    <img height="100" width="200" src="images/container-bg2.jpg">
-                  </label>
-                  
-                  <label>
-                    <input id="image3" type="radio" name="test" value="big">
-                    <img height="100" width="200" src="images/container-bg3.jpg">
-                  </label>
+                        <label>
+                            <input id="image1" type="radio" name="test" value="big">
+                            <img height="100" width="200" src="images/container-bg1.jpg">
+                        </label>
 
-                  <br><button type="button" class="btn btn-dark confirm-button" onclick="confirmBackground()">Change</button>
-                  <br>
+                        <label>
+                            <input id="image2" type="radio" name="test" value="small">
+                            <img height="100" width="200" src="images/container-bg2.jpg">
+                        </label>
+
+                        <label>
+                            <input id="image3" type="radio" name="test" value="big">
+                            <img height="100" width="200" src="images/container-bg3.jpg">
+                        </label>
+
+                        <br><button type="button" class="btn btn-dark confirm-button" onclick="confirmBackground()">Change</button>
+                        <br>
+                    </div>
                 </div>
-              </div>
             </div>
-              
-           </div>
-           <!--<input id="trackNow" type="text">
-           <input id="trackNext" type="text"> -->
-           
 
-        <!------ CODE FOR MAIN AUDIO TAGS WITH TRACKS  -------->   
-        <audio id="audio1" >
-          <source src="" id="src1" />
+        </div>
+        <!--<input id="trackNow" type="text">
+           <input id="trackNext" type="text"> -->
+
+
+        <!------ CODE FOR MAIN AUDIO TAGS WITH TRACKS  -------->
+        <audio id="audio1">
+            <source src="" id="src1" />
         </audio>
-      
-        <audio id="audio2" >
-          <source src="" id="src2" />
+
+        <audio id="audio2">
+            <source src="" id="src2" />
         </audio>
-      
-     <!------ END OF CODE FOR MAIN AUDIO TAGS WITH TRACKS  -------->   
+
+        <!------ END OF CODE FOR MAIN AUDIO TAGS WITH TRACKS  -------->
 
 
         <div class="hover_bkgr_fricc">
@@ -259,16 +262,14 @@
         </div>
 
 
-     
-
-      
-         <div id="result"></div>
+        <div id="result"></div>
     </div>
 
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-<script src="js/main.js"></script>      
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="js/main.js"></script>
+    <script src="js/visualizer.js"></script>
 
 
 </body>

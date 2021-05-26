@@ -726,3 +726,18 @@ width:30%;
 
 
 
+
+#canvas1{
+
+  width: 450px;
+  height: 30px;
+  border-radius: 25px;
+}
+
+#canvas2{
+
+  width: 450px;
+  height: 30px;
+  border-radius: 25px;
+}
+

@@ -8,6 +8,7 @@ function changeBackground(background)
     {
         if(background==m){
             document.body.style.backgroundImage = "url('images/container-bg"+m+".jpg')";
+            $("#wallpaper").modal('hide');
         }
     }
 }

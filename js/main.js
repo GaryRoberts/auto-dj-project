@@ -1,4 +1,4 @@
-var input=0;
+var input = 0;
 var crossFadeValue = 10;
 
 var counter = 0;
@@ -9,21 +9,17 @@ var children = "";
 var dynamicList;
 
 
-
-
-//recorder.stop() 
 setTimeout(function() {
-    recorder.stop(); 
-   
+    recorder.stop();
+
 }, 40000)
 
-function confirmBackground()
-{
-    for(m=0;m<=3;m++)
-    {
-        if(document.getElementById('image'+m).checked) {
-            window.localStorage.setItem('background',m);  
+function confirmBackground() {
+    for (m = 0; m <= 3; m++) {
+        if (document.getElementById('image' + m).checked) {
+            window.localStorage.setItem('background', m);
             changeBackground(m); //updates to new background instantly
+            alertBox("Background updated");
         }
     }
 
@@ -35,13 +31,13 @@ function handleFiles(event) {
     input = event.target.files;
 
     var output = document.getElementById('fileList');
-    var itemId=0;
+    var itemId = 0;
 
 
     Array.from(input).forEach(file => {
         const reader = new FileReader();
 
-        children += '<li id="music'+itemId+'" class="list-group-item" style="color:black;">' + file.name + '</li>';
+        children += '<li id="music' + itemId + '" class="list-group-item" style="color:black;">' + file.name + '</li>';
         itemId++;
     });
 
@@ -55,13 +51,14 @@ document.getElementById("file").addEventListener("change", handleFiles, false);
 var checkbox = document.querySelector("input[name=checkbox]");
 
 checkbox.addEventListener('change', function() {
-    if(this.checked) {
+    if (this.checked) {
         launcher();
     } else {
-        clearInterval(interval);  
-        hide1(); hide2();
-        counter=0;
-        document.getElementById("uploadImage").style.display = ""; 
+        clearInterval(interval);
+        hide1();
+        hide2();
+        counter = 0;
+        document.getElementById("uploadImage").style.display = "";
         document.getElementById("uploadLabel").style.display = "";
     }
 });
@@ -75,7 +72,7 @@ function loadDeck1(input, index) {
     audio1.addEventListener('canplaythrough', function() {
 
         this.play();
-        document.getElementById("music"+index).style.color='red';
+        document.getElementById("music" + index).style.color = 'red';
         document.getElementById("range1").value = 1;
         //soundEffect(1);
         document.getElementById("track1").innerHTML = input[index].name.substring(0, 30) + "...";
@@ -85,7 +82,7 @@ function loadDeck1(input, index) {
 
     setTimeout(function() {
         document.getElementById("audio1").pause();
-       
+
     }, 36000)
 }
 
@@ -97,7 +94,8 @@ function loadDeck2(input, index) {
 
     audio2.addEventListener('canplaythrough', function() {
         this.play();
-        document.getElementById("music"+index).style.color='red';
+
+        document.getElementById("music" + index).style.color = 'red';
         document.getElementById("range1").value = 20;
         //soundEffect(1);
         document.getElementById("track2").innerHTML = input[index].name.substring(0, 30) + "...";
@@ -105,7 +103,8 @@ function loadDeck2(input, index) {
     });
     setTimeout(function() {
         document.getElementById("audio2").pause();
-        
+
+
     }, 36000)
 
 }
@@ -113,50 +112,55 @@ function loadDeck2(input, index) {
 
 
 function launcher() {
-   
-    if(input!=0){
-    
 
-    document.getElementById("uploadImage").style.display = "none"; 
-    document.getElementById("uploadLabel").style.display = "none";
-    //document.getElementById("launch").style.display = "none";
-    loadDeck1(input, counter);
-    counter++;
-    automixer();
-   }
-   else{
-    alertBox("Please load some tracks in the system");
-       checkbox.checked = false;
-   }
+
+    if (input != 0) {
+
+        document.getElementById("uploadImage").style.display = "none";
+        document.getElementById("uploadLabel").style.display = "none";
+        initializeVisuals1();
+        initializeVisuals2();
+        //document.getElementById("launch").style.display = "none";
+        loadDeck1(input, counter);
+
+        counter++;
+        automixer();
+    } else {
+        alertBox("Please load some tracks in the system");
+        checkbox.checked = false;
+    }
 }
 
 
 
 function automixer() {
-
     interval = setInterval(function() {
-        if (counter==input.length) {
+        if (counter == input.length) {
             clearInterval(interval);
-           
-            hide1(); hide2();
+
+            hide1();
+            hide2();
             document.getElementById("range1").value = 10;
             checkbox.checked = false;
-        }     
+        }
         if (counter <= input.length && counter == 1) {
             loadDeck2(input, counter);
+
         }
 
         if (counter <= input.length && counter % 2 == 0) {
             loadDeck1(input, counter);
+
         }
 
         if (counter <= input.length && counter % 2 != 0 && counter > 1) {
             loadDeck2(input, counter);
+
         }
 
 
         counter++;
-       
+
     }, time);
 
 }
@@ -262,37 +266,34 @@ function pauseSound2() {
 }
 
 
-var getRandomEffect=Math.floor(Math.random() * 5); //from 0 to 5
-var getRandomPullup=Math.floor(Math.random() * 1);
+var getRandomEffect = Math.floor(Math.random() * 5); //from 0 to 5
+var getRandomPullup = Math.floor(Math.random() * 1);
 
 
-function soundEffect(effectType)
-{
-  var effectsList = ["effect","transition","horn", "guns", "bounty"];
+function soundEffect(effectType) {
+    var effectsList = ["effect", "transition", "horn", "guns", "bounty"];
 
-   var effect = new Audio('sound_effects/'+effectsList[effectType]+'.mp3');
-   effect.play();   
-   
+    var effect = new Audio('sound_effects/' + effectsList[effectType] + '.mp3');
+    effect.play();
+
 
 }
 
 
-$( document ).ready(function() {
-   
-     $('.hover_bkgr_fricc').click(function(){
-         $('.hover_bkgr_fricc').hide();
-     });
-     $('.popupCloseButton').click(function(){
-         $('.hover_bkgr_fricc').hide();
-     });
+$(document).ready(function() {
+
+    $('.hover_bkgr_fricc').click(function() {
+        $('.hover_bkgr_fricc').hide();
+    });
+    $('.popupCloseButton').click(function() {
+        $('.hover_bkgr_fricc').hide();
+    });
 });
 
 
-function alertBox(message){
-    $( document ).ready(function() {
-      document.getElementById("alertContent").innerHTML=message;
-      $('.hover_bkgr_fricc').show();
+function alertBox(message) {
+    $(document).ready(function() {
+        document.getElementById("alertContent").innerHTML = message;
+        $('.hover_bkgr_fricc').show();
     });
 }
-
-

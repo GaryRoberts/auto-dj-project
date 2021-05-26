@@ -43,6 +43,10 @@
                             joinUser: room.broadcaster
                         });
 
+                        $(document).ready(function(){
+                                $("#screen-sharing").modal('show');
+                        });
+
                         document.querySelector('.hide-after-join').innerHTML = '<img src="https://www.webrtc-experiment.com/images/key-press.gif" style="margint-top:10px; width:50%;" />';
                     },
                     onNewParticipant: function(numberOfParticipants) {

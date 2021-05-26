@@ -14,7 +14,7 @@ var src, src2;
 var analyser, analyser2;
 
 
-function initializeVisuals1() {
+function initializeVisuals() {
 
     audio = document.getElementById("audio1");
 
@@ -41,20 +41,13 @@ function initializeVisuals1() {
     WIDTH = canvas.width;
     HEIGHT = canvas.height;
 
-    barWidth = (WIDTH / bufferLength) * 5;
+    barWidth = (WIDTH / bufferLength) * 4;
     barHeight;
     x = 0;
 
-    renderFrame1();
 
-}
-
-
-
-function initializeVisuals2() {
 
     audio2 = document.getElementById("audio2");
-
 
     context2 = new AudioContext();
     src2 = context2.createMediaElementSource(audio2);
@@ -78,13 +71,17 @@ function initializeVisuals2() {
     WIDTH2 = canvas2.width;
     HEIGHT2 = canvas2.height;
 
-    barWidth2 = (WIDTH2 / bufferLength2) * 5;
+    barWidth2 = (WIDTH2 / bufferLength2) * 4;
     barHeight2;
     x2 = 0;
 
+    renderFrame1();
     renderFrame2();
 
 }
+
+
+
 
 
 function renderFrame1() {
@@ -93,7 +90,7 @@ function renderFrame1() {
     x = 0;
 
     analyser.getByteFrequencyData(dataArray);
-
+   
     ctx.fillStyle = "#000";
     ctx.fillRect(0, 0, WIDTH, HEIGHT);
 
@@ -101,7 +98,7 @@ function renderFrame1() {
         barHeight = dataArray[i];
 
         var r = barHeight + (50 * (i / bufferLength));
-        var g = 250 * (i / bufferLength);
+        var g = 100 * (i / bufferLength);
         var b = 50;
 
         ctx.fillStyle = "rgb(" + r + "," + g + "," + b + ")";
@@ -109,6 +106,7 @@ function renderFrame1() {
 
         x += barWidth + 1;
     }
+
 }
 
 
@@ -126,7 +124,7 @@ function renderFrame2() {
         barHeight2 = dataArray2[i];
 
         var r = barHeight2 + (50 * (i / bufferLength2));
-        var g = 250 * (i / bufferLength2);
+        var g = 100 * (i / bufferLength2);
         var b = 50;
 
         ctx2.fillStyle = "rgb(" + r + "," + g + "," + b + ")";

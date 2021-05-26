@@ -118,8 +118,8 @@ function launcher() {
 
         document.getElementById("uploadImage").style.display = "none";
         document.getElementById("uploadLabel").style.display = "none";
-        initializeVisuals1();
-        initializeVisuals2();
+        initializeVisuals();
+        //initializeVisuals2();
 
         loadDeck1(input, counter);
 
@@ -140,8 +140,10 @@ function automixer() {
 
             hide1();
             hide2();
+            
             document.getElementById("range1").value = 10;
             checkbox.checked = false;
+            input=NULL;
         }
         if (counter <= input.length && counter == 1) {
             loadDeck2(input, counter);

@@ -466,6 +466,7 @@ height: 20px;
 -webkit-appearance: none;
 margin: 10px 0;
 width: 20%;
+margin-left:-10%;
 }
 input[type=range]:focus {
 outline: none;
@@ -728,16 +729,15 @@ width:30%;
 
 
 #canvas1{
-
   width: 450px;
-  height: 30px;
+  height: 40px;
   border-radius: 25px;
 }
 
 #canvas2{
 
   width: 450px;
-  height: 30px;
+  height: 40px;
   border-radius: 25px;
 }
 

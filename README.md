@@ -9,6 +9,7 @@ JavaScript based web app that allows a user to load music in the browser and hav
 5. Music visualizer when songs are playing</br>
 6. Allows you to make friends join a live stream of your auto dj mixing
 
+## Screenshots
 ![landing-page](https://user-images.githubusercontent.com/35618554/118428299-c4512780-b694-11eb-9ca1-fe46a94908a9.JPG)</br>
 ![image](https://user-images.githubusercontent.com/35618554/119297905-82d6f400-bc21-11eb-8696-6c0ac40dcac4.png)</br>
 ![image](https://user-images.githubusercontent.com/35618554/119709594-00b61d80-be23-11eb-9d8a-2887e1dbfdb8.png)</br>

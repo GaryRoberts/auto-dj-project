@@ -36,126 +36,156 @@ checkbox.addEventListener('change', function() {
     }
 });
 
+var currentDeckNumber = 1;
+var nextDeckNumber = 2;
+
 function launcher() {
     if (input && input.length > 0) {
         document.getElementById("uploadImage").style.display = "none";
         document.getElementById("uploadLabel").style.display = "none";
         initializeVisuals(); // Assuming this function exists
         counter = 0;
-        playTrack(1, input, counter);
-        counter++;
+        currentDeckNumber = 1;
+        nextDeckNumber = 2;
+        playCurrentTrack();
     } else {
         alertBox("Please load some tracks in the system");
         checkbox.checked = false;
     }
 }
 
-function playTrack(deckNumber, input, index) {
-    var audioElement = document.getElementById("audio" + deckNumber);
-    var otherDeckNumber = deckNumber === 1 ? 2 : 1;
-    var otherAudioElement = document.getElementById("audio" + otherDeckNumber);
+function playCurrentTrack() {
+    if (counter >= input.length) {
+        // No more tracks to play
+        stopPlayback();
+        return;
+    }
+
+    var currentAudio = document.getElementById("audio" + currentDeckNumber);
+    var trackIndex = counter;
+    var trackFile = input[trackIndex];
 
     // Set the source and load the audio
-    $("#src" + deckNumber).attr("src", URL.createObjectURL(input[index]));
-    audioElement.load();
+    $("#src" + currentDeckNumber).attr("src", URL.createObjectURL(trackFile));
+    currentAudio.load();
 
-    audioElement.addEventListener('canplaythrough', function() {
-        audioElement.play();
-        audioElement.volume = 1; // Start at full volume
-        document.getElementById("music" + index).style.color = 'red';
-        document.getElementById("track" + deckNumber).innerHTML = input[index].name.substring(0, 30) + "...";
-        if (deckNumber === 1) {
+    currentAudio.addEventListener('canplaythrough', function() {
+        currentAudio.play();
+        currentAudio.volume = 1; // Start at full volume
+        document.getElementById("music" + trackIndex).style.color = 'red';
+        document.getElementById("track" + currentDeckNumber).innerHTML = trackFile.name.substring(0, 30) + "...";
+        if (currentDeckNumber === 1) {
             show1();
         } else {
             show2();
         }
+        // Move the crossfader to the current deck
+        document.getElementById("range1").value = currentDeckNumber === 1 ? 0 : 20;
+
         // Schedule the crossfade
         setTimeout(function() {
-            startCrossfade(deckNumber, otherDeckNumber);
+            counter++;
+            playNextTrack();
         }, time - crossfadeDuration);
     }, { once: true });
 }
 
-function startCrossfade(outgoingDeckNumber, incomingDeckNumber) {
-    var outgoingAudio = document.getElementById("audio" + outgoingDeckNumber);
-    var incomingAudio = document.getElementById("audio" + incomingDeckNumber);
-
-    if (counter < input.length) {
-        $("#src" + incomingDeckNumber).attr("src", URL.createObjectURL(input[counter]));
-        incomingAudio.load();
-        incomingAudio.addEventListener('canplaythrough', function() {
-            incomingAudio.play();
-            incomingAudio.volume = 0; // Start at 0 volume
-            document.getElementById("music" + counter).style.color = 'red';
-            document.getElementById("track" + incomingDeckNumber).innerHTML = input[counter].name.substring(0, 30) + "...";
-            if (incomingDeckNumber === 1) {
-                show1();
-            } else {
-                show2();
-            }
-            crossfadeVolumes(outgoingAudio, incomingAudio, crossfadeDuration, function() {
-                // After crossfade is complete, schedule the next crossfade
-                setTimeout(function() {
-                    startCrossfade(incomingDeckNumber, outgoingDeckNumber);
-                }, time - crossfadeDuration);
-            });
-            counter++;
-        }, { once: true });
-    } else {
-        // No more tracks, fade out the outgoing track
-        fadeOut(outgoingAudio, crossfadeDuration);
-        checkbox.checked = false; // Stop the automixer
+function playNextTrack() {
+    if (counter >= input.length) {
+        // No more tracks to play, fade out current track
+        fadeOutCurrentTrack();
+        return;
     }
+
+    var nextAudio = document.getElementById("audio" + nextDeckNumber);
+    var trackIndex = counter;
+    var trackFile = input[trackIndex];
+
+    // Set the source and load the audio
+    $("#src" + nextDeckNumber).attr("src", URL.createObjectURL(trackFile));
+    nextAudio.load();
+
+    nextAudio.addEventListener('canplaythrough', function() {
+        nextAudio.play();
+        nextAudio.volume = 0; // Start at 0 volume
+        document.getElementById("music" + trackIndex).style.color = 'red';
+        document.getElementById("track" + nextDeckNumber).innerHTML = trackFile.name.substring(0, 30) + "...";
+        if (nextDeckNumber === 1) {
+            show1();
+        } else {
+            show2();
+        }
+        // Start crossfade
+        performCrossfade();
+    }, { once: true });
 }
 
-function crossfadeVolumes(outgoingAudio, incomingAudio, duration, callback) {
+function performCrossfade() {
     var startTime = Date.now();
+    var currentAudio = document.getElementById("audio" + currentDeckNumber);
+    var nextAudio = document.getElementById("audio" + nextDeckNumber);
 
     function updateVolumes() {
         var now = Date.now();
         var elapsed = now - startTime;
-        var fraction = elapsed / duration;
+        var fraction = elapsed / crossfadeDuration;
         if (fraction > 1) {
             fraction = 1;
         }
 
-        outgoingAudio.volume = 1 - fraction;
-        incomingAudio.volume = fraction;
+        currentAudio.volume = 1 - fraction;
+        nextAudio.volume = fraction;
+
+        // Move crossfader accordingly
+        var crossfaderValue = currentDeckNumber === 1 ? fraction * 20 : 20 - (fraction * 20);
+        document.getElementById("range1").value = crossfaderValue;
 
         if (fraction < 1) {
             requestAnimationFrame(updateVolumes);
         } else {
             // Crossfade complete
-            outgoingAudio.pause();
-            outgoingAudio.currentTime = 0;
-            if (callback) {
-                callback();
-            }
+            currentAudio.pause();
+            currentAudio.currentTime = 0;
+            // Swap decks
+            var temp = currentDeckNumber;
+            currentDeckNumber = nextDeckNumber;
+            nextDeckNumber = temp;
+
+            // Schedule next track
+            setTimeout(function() {
+                counter++;
+                playNextTrack();
+            }, time - crossfadeDuration);
         }
     }
 
     updateVolumes();
 }
 
-function fadeOut(audioElement, duration) {
+function fadeOutCurrentTrack() {
+    var currentAudio = document.getElementById("audio" + currentDeckNumber);
     var startTime = Date.now();
 
     function updateVolume() {
         var now = Date.now();
         var elapsed = now - startTime;
-        var fraction = elapsed / duration;
+        var fraction = elapsed / crossfadeDuration;
         if (fraction > 1) {
             fraction = 1;
         }
 
-        audioElement.volume = 1 - fraction;
+        currentAudio.volume = 1 - fraction;
+
+        // Move crossfader to center
+        document.getElementById("range1").value = currentDeckNumber === 1 ? (1 - fraction) * 20 : fraction * 20;
 
         if (fraction < 1) {
             requestAnimationFrame(updateVolume);
         } else {
             // Fade out complete
-            audioElement.pause();
-            audioElement.currentTime = 0;
+            currentAudio.pause();
+            currentAudio.currentTime = 0;
+            stopPlayback();
         }
     }
 
@@ -163,16 +193,20 @@ function fadeOut(audioElement, duration) {
 }
 
 function stopPlayback() {
-    clearInterval(interval);
     hide1();
     hide2();
     counter = 0;
     document.getElementById("uploadImage").style.display = "";
     document.getElementById("uploadLabel").style.display = "";
-    document.getElementById("audio1").pause();
-    document.getElementById("audio2").pause();
-    document.getElementById("audio1").currentTime = 0;
-    document.getElementById("audio2").currentTime = 0;
+    var audio1 = document.getElementById("audio1");
+    var audio2 = document.getElementById("audio2");
+    audio1.pause();
+    audio2.pause();
+    audio1.currentTime = 0;
+    audio2.currentTime = 0;
+    // Reset crossfader to center
+    document.getElementById("range1").value = 10;
+    checkbox.checked = false;
 }
 
 function show1() {
@@ -185,12 +219,14 @@ function show2() {
 
 function hide1() {
     document.getElementById("play1").style.display = "none";
-    document.getElementById("audio1").pause();
+    var audio1 = document.getElementById("audio1");
+    audio1.pause();
 }
 
 function hide2() {
     document.getElementById("play2").style.display = "none";
-    document.getElementById("audio2").pause();
+    var audio2 = document.getElementById("audio2");
+    audio2.pause();
 }
 
 $(document).ready(function() {

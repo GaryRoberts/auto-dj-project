@@ -133,11 +133,21 @@ function performCrossfade() {
             fraction = 1;
         }
 
-        currentAudio.volume = 1 - fraction;
-        nextAudio.volume = fraction;
+        // Smooth volume changes
+        var easingFraction = fraction * fraction * (3 - 2 * fraction); // Ease in-out
+
+        currentAudio.volume = 1 - easingFraction;
+        nextAudio.volume = easingFraction;
 
         // Move crossfader accordingly
-        var crossfaderValue = currentDeckNumber === 1 ? fraction * 20 : 20 - (fraction * 20);
+        var crossfaderValue;
+        if (nextDeckNumber === 1) {
+            // Crossfader moves from 20 to 0 (right to left)
+            crossfaderValue = 20 - (easingFraction * 20);
+        } else {
+            // Crossfader moves from 0 to 20 (left to right)
+            crossfaderValue = easingFraction * 20;
+        }
         document.getElementById("range1").value = crossfaderValue;
 
         if (fraction < 1) {
@@ -151,7 +161,7 @@ function performCrossfade() {
             currentDeckNumber = nextDeckNumber;
             nextDeckNumber = temp;
 
-            // Schedule next track
+            // Prepare for the next crossfade
             setTimeout(function() {
                 counter++;
                 playNextTrack();
@@ -174,10 +184,14 @@ function fadeOutCurrentTrack() {
             fraction = 1;
         }
 
-        currentAudio.volume = 1 - fraction;
+        // Smooth fade-out
+        var easingFraction = fraction * fraction * (3 - 2 * fraction); // Ease in-out
+
+        currentAudio.volume = 1 - easingFraction;
 
         // Move crossfader to center
-        document.getElementById("range1").value = currentDeckNumber === 1 ? (1 - fraction) * 20 : fraction * 20;
+        var crossfaderValue = currentDeckNumber === 1 ? easingFraction * 10 : 20 - (easingFraction * 10);
+        document.getElementById("range1").value = crossfaderValue;
 
         if (fraction < 1) {
             requestAnimationFrame(updateVolume);
@@ -221,12 +235,14 @@ function hide1() {
     document.getElementById("play1").style.display = "none";
     var audio1 = document.getElementById("audio1");
     audio1.pause();
+    audio1.currentTime = 0;
 }
 
 function hide2() {
     document.getElementById("play2").style.display = "none";
     var audio2 = document.getElementById("audio2");
     audio2.pause();
+    audio2.currentTime = 0;
 }
 
 $(document).ready(function() {

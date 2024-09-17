@@ -2,28 +2,9 @@ var input = 0;
 var crossFadeValue = 10;
 
 var counter = 0;
-var interval;
-var adjustVolume;
-var time = 30000;
+var time = 30000; // Duration of each track playback
+var crossfadeDuration = 10000; // Duration of crossfade (10 seconds)
 var children = "";
-var dynamicList;
-
-
-setTimeout(function() {
-    recorder.stop();
-
-}, 40000)
-
-function confirmBackground() {
-    for (m = 0; m <= 3; m++) {
-        if (document.getElementById('image' + m).checked) {
-            window.localStorage.setItem('background', m);
-            changeBackground(m); //updates to new background instantly
-            alertBox("Background updated");
-        }
-    }
-
-}
 
 document.getElementById("range1").value = 10;
 
@@ -33,18 +14,15 @@ function handleFiles(event) {
     var output = document.getElementById('fileList');
     var itemId = 0;
 
+    children = ""; // Reset the list
 
     Array.from(input).forEach(file => {
-        const reader = new FileReader();
-
         children += '<li id="music' + itemId + '" class="list-group-item" style="color:black;">' + file.name + '</li>';
         itemId++;
     });
 
-
     output.innerHTML = '<ul class="list-group">' + children + '</ul>';
 }
-
 
 document.getElementById("file").addEventListener("change", handleFiles, false);
 
@@ -54,178 +32,155 @@ checkbox.addEventListener('change', function() {
     if (this.checked) {
         launcher();
     } else {
-        clearInterval(interval);
-        hide1();
-        hide2();
-        counter = 0;
-        document.getElementById("uploadImage").style.display = "";
-        document.getElementById("uploadLabel").style.display = "";
+        stopPlayback();
     }
 });
 
-function loadDeck1(input, index) {
-    var audio1 = document.getElementById("audio1");
-
-    $("#src1").attr("src", URL.createObjectURL(input[index]));
-    audio1.load();
-
-    audio1.addEventListener('canplaythrough', function() {
-
-        this.play();
-        document.getElementById("music" + index).style.color = 'red';
-        document.getElementById("range1").value = 1;
-        //soundEffect(1);
-        document.getElementById("track1").innerHTML = input[index].name.substring(0, 30) + "...";
-        show1();
-
-    });
-
-    setTimeout(function() {
-        document.getElementById("audio1").pause();
-
-    }, 36000)
-}
-
-function loadDeck2(input, index) {
-    var audio2 = document.getElementById("audio2");
-
-    $("#src2").attr("src", URL.createObjectURL(input[index]));
-    audio2.load();
-
-    audio2.addEventListener('canplaythrough', function() {
-        this.play();
-
-        document.getElementById("music" + index).style.color = 'red';
-        document.getElementById("range1").value = 20;
-        //soundEffect(1);
-        document.getElementById("track2").innerHTML = input[index].name.substring(0, 30) + "...";
-        show2();
-    });
-    setTimeout(function() {
-        document.getElementById("audio2").pause();
-
-
-    }, 36000)
-
-}
-
-
-
 function launcher() {
-
-
-    if (input != 0) {
-
+    if (input && input.length > 0) {
         document.getElementById("uploadImage").style.display = "none";
         document.getElementById("uploadLabel").style.display = "none";
-        initializeVisuals();
-
-        loadDeck1(input, counter);
-
+        initializeVisuals(); // Assuming this function exists
+        counter = 0;
+        playTrack(1, input, counter);
         counter++;
-        automixer();
     } else {
         alertBox("Please load some tracks in the system");
         checkbox.checked = false;
     }
 }
 
+function playTrack(deckNumber, input, index) {
+    var audioElement = document.getElementById("audio" + deckNumber);
+    var otherDeckNumber = deckNumber === 1 ? 2 : 1;
+    var otherAudioElement = document.getElementById("audio" + otherDeckNumber);
 
+    // Set the source and load the audio
+    $("#src" + deckNumber).attr("src", URL.createObjectURL(input[index]));
+    audioElement.load();
 
-function automixer() {
-
-   // https://stackoverflow.com/questions/21277900/how-can-i-pause-setinterval-functions
-    interval = setInterval(function() {
-        if (counter == input.length) {
-            clearInterval(interval);
-
-            hide1();
-            hide2();
-            
-            document.getElementById("range1").value = 10;
-            checkbox.checked = false;
-            //input=NULL;
+    audioElement.addEventListener('canplaythrough', function() {
+        audioElement.play();
+        audioElement.volume = 1; // Start at full volume
+        document.getElementById("music" + index).style.color = 'red';
+        document.getElementById("track" + deckNumber).innerHTML = input[index].name.substring(0, 30) + "...";
+        if (deckNumber === 1) {
+            show1();
+        } else {
+            show2();
         }
-        if (counter <= input.length && counter == 1) {
-            loadDeck2(input, counter);
-
-        }
-
-        if (counter <= input.length && counter % 2 == 0) {
-            loadDeck1(input, counter);
-
-        }
-
-        if (counter <= input.length && counter % 2 != 0 && counter > 1) {
-            loadDeck2(input, counter);
-
-        }
-
-
-        counter++;
-
-    }, time);
-
+        // Schedule the crossfade
+        setTimeout(function() {
+            startCrossfade(deckNumber, otherDeckNumber);
+        }, time - crossfadeDuration);
+    }, { once: true });
 }
 
+function startCrossfade(outgoingDeckNumber, incomingDeckNumber) {
+    var outgoingAudio = document.getElementById("audio" + outgoingDeckNumber);
+    var incomingAudio = document.getElementById("audio" + incomingDeckNumber);
 
-
-
-function volumeAdjuster1() {
-    adjustVolume = setInterval(function() {
-        for (var m = 1; m <= 20; m++) {
-            document.getElementById("range1").value = crossFadeValue++;
-            if (m == 20) {
-                document.getElementById("audio1").pause();
+    if (counter < input.length) {
+        $("#src" + incomingDeckNumber).attr("src", URL.createObjectURL(input[counter]));
+        incomingAudio.load();
+        incomingAudio.addEventListener('canplaythrough', function() {
+            incomingAudio.play();
+            incomingAudio.volume = 0; // Start at 0 volume
+            document.getElementById("music" + counter).style.color = 'red';
+            document.getElementById("track" + incomingDeckNumber).innerHTML = input[counter].name.substring(0, 30) + "...";
+            if (incomingDeckNumber === 1) {
+                show1();
+            } else {
+                show2();
             }
-
-            setInterval(function() {
-                if (m >= 10) {
-                    document.getElementById("audio2").volume += 0.1;
-
-                    document.getElementById("audio1").volume -= 0.1;
-                }
-
-
-            }, 3000);
-        }
-    }, 6000);
+            crossfadeVolumes(outgoingAudio, incomingAudio, crossfadeDuration, function() {
+                // After crossfade is complete, schedule the next crossfade
+                setTimeout(function() {
+                    startCrossfade(incomingDeckNumber, outgoingDeckNumber);
+                }, time - crossfadeDuration);
+            });
+            counter++;
+        }, { once: true });
+    } else {
+        // No more tracks, fade out the outgoing track
+        fadeOut(outgoingAudio, crossfadeDuration);
+        checkbox.checked = false; // Stop the automixer
+    }
 }
 
+function crossfadeVolumes(outgoingAudio, incomingAudio, duration, callback) {
+    var startTime = Date.now();
 
+    function updateVolumes() {
+        var now = Date.now();
+        var elapsed = now - startTime;
+        var fraction = elapsed / duration;
+        if (fraction > 1) {
+            fraction = 1;
+        }
 
-function volumeAdjuster2() {
-    adjustVolume = setInterval(function() {
-        for (var m = 1; m <= 20; m++) {
-            document.getElementById("range1").value = crossFadeValue--;
-            if (m == 20) {
-                document.getElementById("audio2").pause();
+        outgoingAudio.volume = 1 - fraction;
+        incomingAudio.volume = fraction;
+
+        if (fraction < 1) {
+            requestAnimationFrame(updateVolumes);
+        } else {
+            // Crossfade complete
+            outgoingAudio.pause();
+            outgoingAudio.currentTime = 0;
+            if (callback) {
+                callback();
             }
-
-            setInterval(function() {
-                if (m >= 10) {
-                    document.getElementById("audio2").volume -= 0.1;
-
-                    document.getElementById("audio1").volume += 0.1;
-                }
-
-
-            }, 3000);
         }
-    }, 6000);
+    }
+
+    updateVolumes();
 }
 
+function fadeOut(audioElement, duration) {
+    var startTime = Date.now();
 
+    function updateVolume() {
+        var now = Date.now();
+        var elapsed = now - startTime;
+        var fraction = elapsed / duration;
+        if (fraction > 1) {
+            fraction = 1;
+        }
 
+        audioElement.volume = 1 - fraction;
+
+        if (fraction < 1) {
+            requestAnimationFrame(updateVolume);
+        } else {
+            // Fade out complete
+            audioElement.pause();
+            audioElement.currentTime = 0;
+        }
+    }
+
+    updateVolume();
+}
+
+function stopPlayback() {
+    clearInterval(interval);
+    hide1();
+    hide2();
+    counter = 0;
+    document.getElementById("uploadImage").style.display = "";
+    document.getElementById("uploadLabel").style.display = "";
+    document.getElementById("audio1").pause();
+    document.getElementById("audio2").pause();
+    document.getElementById("audio1").currentTime = 0;
+    document.getElementById("audio2").currentTime = 0;
+}
 
 function show1() {
     document.getElementById("play1").style.display = "";
-
 }
 
 function show2() {
     document.getElementById("play2").style.display = "";
-
 }
 
 function hide1() {
@@ -238,25 +193,7 @@ function hide2() {
     document.getElementById("audio2").pause();
 }
 
-
-
-
-var getRandomEffect = Math.floor(Math.random() * 5); //from 0 to 5
-var getRandomPullup = Math.floor(Math.random() * 1);
-
-
-function soundEffect(effectType) {
-    var effectsList = ["effect", "transition", "horn", "guns", "bounty"];
-
-    var effect = new Audio('sound_effects/' + effectsList[effectType] + '.mp3');
-    effect.play();
-
-
-}
-
-
 $(document).ready(function() {
-
     $('.hover_bkgr_fricc').click(function() {
         $('.hover_bkgr_fricc').hide();
     });
@@ -264,7 +201,6 @@ $(document).ready(function() {
         $('.hover_bkgr_fricc').hide();
     });
 });
-
 
 function alertBox(message) {
     $(document).ready(function() {
